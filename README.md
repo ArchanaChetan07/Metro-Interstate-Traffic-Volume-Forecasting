@@ -194,13 +194,6 @@ flowchart LR
 | 9 | Hybrid | Combine ARIMA + LSTM forecast paths |
 | 10 | Evaluate | MAE, RMSE, R² comparison table |
 
-```mermaid
-%%{init: {'theme':'base'}}%%
-pie showData title Repository languages (bytes)
-    "Jupyter Notebook" : 788335
-    "Python" : 2495
-```
-
 ---
 
 ## Model cards
