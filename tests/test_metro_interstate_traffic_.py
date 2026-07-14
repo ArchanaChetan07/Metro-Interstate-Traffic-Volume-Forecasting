@@ -12,7 +12,7 @@ class TestTrafficDataProcessing:
     def test_datetime_parsing(self):
         df = pd.DataFrame({"date_time": ["2012-10-02 09:00:00", "2012-10-02 10:00:00"]})
         df["date_time"] = pd.to_datetime(df["date_time"])
-        assert df["date_time"].dtype == "datetime64[ns]"
+        assert np.issubdtype(df["date_time"].dtype, np.datetime64)
 
     def test_hour_feature_extraction(self):
         df = pd.DataFrame({"date_time": pd.to_datetime(["2012-10-02 09:00:00", "2012-10-02 14:00:00"])})
