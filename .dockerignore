@@ -1,0 +1,10 @@
+.venv
+__pycache__
+.pytest_cache
+.git
+*.ipynb
+EDA
+modeling
+Traffic_EDA
+Project_EDA.qmd
+artifacts/full_bench_stdout.txt
