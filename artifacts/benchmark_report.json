@@ -1,0 +1,75 @@
+{
+  "note": "Prior README numbers (Hybrid R\u00b2\u22480.995 etc.) were produced by notebook cells that scored simulated predictions = y_true + Gaussian noise on a sine wave \u2014 not model forecasts on I-94 test data. This report replaces those with held-out evaluations from metro_traffic/.",
+  "n_rows_window": 32208,
+  "features": [
+    "temp",
+    "rain_1h",
+    "snow_1h",
+    "clouds_all",
+    "is_holiday",
+    "hour",
+    "month",
+    "is_weekend",
+    "rush_hour"
+  ],
+  "split": {
+    "train": 22545,
+    "val": 4831,
+    "test": 4832,
+    "scheme": "chronological 70/15/15 shuffle=False"
+  },
+  "models": {
+    "LinearRegression": {
+      "mae": 1385.2852485680894,
+      "rmse": 1553.8324189530304,
+      "r2": 0.3809609692065844,
+      "eval_slice": "full_chronological_test_15pct"
+    },
+    "GradientBoosting": {
+      "mae": 311.6080400443466,
+      "rmse": 475.7344168337892,
+      "r2": 0.9419718374751567,
+      "eval_slice": "full_chronological_test_15pct"
+    },
+    "LinearRegression_last168": {
+      "mae": 1406.2522456372305,
+      "rmse": 1575.8368768636976,
+      "r2": 0.38559115495187557,
+      "eval_slice": "last_168_of_tabular_test"
+    },
+    "GradientBoosting_last168": {
+      "mae": 324.412676523372,
+      "rmse": 444.4097276400561,
+      "r2": 0.9511345329988404,
+      "eval_slice": "last_168_of_tabular_test"
+    },
+    "ARIMA(4,1,2)": {
+      "mae": 459.83284116080193,
+      "rmse": 673.6654116063747,
+      "r2": 0.8847572479629546,
+      "eval_slice": "last_168h_onestep_walkforward",
+      "train_points": 28781
+    },
+    "LSTM": {
+      "mae": 257.2458772549317,
+      "rmse": 365.091825763883,
+      "r2": 0.9661522861911918,
+      "eval_slice": "last_168h_onestep_walkforward",
+      "epochs": 5,
+      "seed": 42
+    },
+    "Hybrid_ARIMA_LSTM_residual": {
+      "mae": 364.6832522143963,
+      "rmse": 516.910099443754,
+      "r2": 0.9321491712645856,
+      "eval_slice": "last_168h_onestep_walkforward",
+      "architecture": "ARIMA(4,1,2) on train volume + LSTM on train ARIMA residuals; one-step walk-forward: yhat=ARIMA_forecast + LSTM_residual (updates with observations after each step; no y_t in the prediction of y_t)",
+      "epochs": 5,
+      "seed": 42
+    }
+  },
+  "adf": {
+    "statistic": -21.892504355867217,
+    "pvalue": 0.0
+  }
+}
