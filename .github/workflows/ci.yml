@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI
 
 on:
   push:
@@ -21,20 +21,21 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pytest pytest-cov flake8
-          pip install -r requirements.txt || true
+          python -m pip install --upgrade pip
+          pip install -r requirements-fast.txt flake8
 
-      - name: Lint with flake8
-        run: flake8 . --max-line-length=120 --ignore=E501,W503 --exclude=.git,__pycache__,.ipynb_checkpoints
-        continue-on-error: true
+      - name: Lint with flake8 (package + tests + scripts)
+        run: |
+          flake8 metro_traffic scripts tests \
+            --max-line-length=120 \
+            --ignore=E501,W503,E203
 
-      - name: Run tests
-        run: pytest tests/ -v --tb=short 2>/dev/null || echo "Tests completed"
+      - name: Run pytest
+        env:
+          PYTHONPATH: .
+        run: pytest tests/ -v --tb=short
 
-      - name: Upload coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: .pytest_cache/
-          if-no-files-found: ignore
+      - name: Fast benchmark (LR + GBR + ADF)
+        env:
+          PYTHONPATH: .
+        run: python scripts/run_benchmark.py --out artifacts/ci_benchmark.json
